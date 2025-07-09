@@ -40,6 +40,11 @@ public class StockTracker {
                 account.buyStock(purchaseStock);
                 printAccountSummary(account);
             } else if (choice == 2) {
+                if(account.getOwnedStock() == null) {
+                    System.out.println("You do not own any stock to sell.");
+                    System.out.println();
+                    continue;
+                }
                 Stock sellStock = collectStockInfo();
                 account.sellStock(sellStock);
                 printAccountSummary(account);
