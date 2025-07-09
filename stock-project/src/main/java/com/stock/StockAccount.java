@@ -42,7 +42,8 @@ public class StockAccount {
 
             if (ownedStock != null && ownedStock.getStockSymbol().equalsIgnoreCase(stock.getStockSymbol())) {
                 int totalShares = ownedStock.getShares() + stock.getShares();
-                ownedStock.setShares(totalShares);
+                stock.setShares(totalShares);
+                ownedStock = stock;
             } else {
                 ownedStock = stock;
             }
@@ -63,13 +64,18 @@ public class StockAccount {
             } else {
                 balance += sellAmount * proposedStock.getStockPrice();
                 int newShareAmount = ownedStock.getShares() - sellAmount;
-                ownedStock.setShares(newShareAmount);
+
+                if (newShareAmount > 0) {
+                    proposedStock.setShares(newShareAmount);
+                    ownedStock = proposedStock;
+                } else {
+                    ownedStock = null;
+                }
             }
         } else {
             System.out.println("Sorry you do not own any of that stock.");
         }
     }
-
     public Stock getOwnedStock() {
         return ownedStock;
     }

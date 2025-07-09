@@ -60,7 +60,18 @@ public class StockTracker {
         System.out.print("Please enter the price: ");
         Double stockPrice = input.nextDouble();
 
-        return new Stock(stockName, stockAmount, stockPrice);
+        System.out.print("Is this a dividend stock? (y/n): ");
+        String isDividendStock = input.next();
+
+        if (isDividendStock.equalsIgnoreCase("y")) {
+            System.out.print("Please enter the dividend amount: ");
+            double dividendAmount = input.nextDouble();
+            DividendStock stock = new DividendStock(stockName, stockAmount, stockPrice);
+            stock.setDividendPaid(dividendAmount);
+            return stock;
+        } else {
+            return new Stock(stockName, stockAmount, stockPrice);
+        }
     }
 
 
