@@ -1,4 +1,4 @@
-package com.stock.lab;
+package com.stock;
 
 public class Stock {
     private final String stockSymbol;

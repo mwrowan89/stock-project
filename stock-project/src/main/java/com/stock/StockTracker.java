@@ -1,6 +1,5 @@
-package com.stock.lab;
+package com.stock;
 import java.util.Scanner;
-import com.stock.lab.Stock;
 
 public class StockTracker {
     static Scanner input = new Scanner(System.in);

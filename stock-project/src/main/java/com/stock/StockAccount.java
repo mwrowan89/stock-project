@@ -1,4 +1,4 @@
-package com.stock.lab;
+package com.stock;
 
 public class StockAccount {
     private final String name;
