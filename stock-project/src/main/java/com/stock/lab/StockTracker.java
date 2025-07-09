@@ -1,5 +1,6 @@
 package com.stock.lab;
 import java.util.Scanner;
+import com.stock.lab.Stock;
 
 public class StockTracker {
     static Scanner input = new Scanner(System.in);
@@ -10,16 +11,7 @@ public class StockTracker {
 
         printAccountSummary(account);
 
-        System.out.println("You will now be buying stock. ");
-
-        Stock purchaseStock = collectStockInfo();
-        account.buyStock(purchaseStock);
-        printAccountSummary(account);
-
-
-        System.out.println("We will now be selling stock.");
-        Stock sellStock = collectStockInfo();
-        account.sellStock(sellStock);
+        userSelection(account);
 
         printAccountSummary(account);
 
@@ -27,6 +19,35 @@ public class StockTracker {
         input.close();
     }
 
+    private static void userSelection(StockAccount account) {
+        int choice = 0;
+
+        while (choice != 3) {
+            System.out.println("What would you like to do today?");
+            System.out.println("1. Buy Stock");
+            System.out.println("2. Sell Stock");
+            System.out.println("3. Exit");
+            System.out.print("Please enter 1, 2, or 3: ");
+            choice = input.nextInt();
+
+            while (choice < 1 || choice > 3) {
+                System.out.print("Invalid choice. Please enter 1, 2, or 3: ");
+                choice = input.nextInt();
+            }
+
+            if (choice == 1) {
+                Stock purchaseStock = collectStockInfo();
+                account.buyStock(purchaseStock);
+                printAccountSummary(account);
+            } else if (choice == 2) {
+                Stock sellStock = collectStockInfo();
+                account.sellStock(sellStock);
+                printAccountSummary(account);
+            }
+        }
+
+        System.out.println("Thank you for using the Stock Tracker. Goodbye!");
+    }
     private static Stock collectStockInfo() {
         System.out.print("Please enter the name of the stock: ");
         String stockName = input.next();
@@ -65,7 +86,7 @@ public class StockTracker {
             System.out.println("You do not own any stock. Sorry");
         } else {
             System.out.println("You own " + ownedStock.getShares()
-                    + " shares of " + ownedStock.getStockSymbol());
+                    + " shares of " + ownedStock.getStockSymbol() );
         }
         System.out.println();
     }
@@ -75,5 +96,6 @@ public class StockTracker {
         System.out.println("*******************************");
         System.out.println(" Welcome to the Stock Tracker!");
         System.out.println("*******************************");
+        System.out.println();
     }
 }

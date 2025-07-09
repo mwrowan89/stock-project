@@ -44,10 +44,15 @@ public class StockAccount {
     }
 
     public void sellStock(Stock proposedStock) {
-        if(proposedStock.getStockSymbol().equalsIgnoreCase(ownedStock.getStockSymbol())) {
+        if (ownedStock == null) {
+            System.out.println("You don't own any stock to sell.");
+            return;
+        }
+
+        if (proposedStock.getStockSymbol().equalsIgnoreCase(ownedStock.getStockSymbol())) {
             int shareAmount = ownedStock.getShares();
             int sellAmount = proposedStock.getShares();
-            if(shareAmount < sellAmount) {
+            if (shareAmount < sellAmount) {
                 System.out.println("Not enough stock to sell");
             } else {
                 balance += sellAmount * proposedStock.getStockPrice();
