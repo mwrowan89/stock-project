@@ -12,8 +12,6 @@ public class StockTracker {
 
         userSelection(account);
 
-        printAccountSummary(account);
-
         //lAST line in main
         input.close();
     }
