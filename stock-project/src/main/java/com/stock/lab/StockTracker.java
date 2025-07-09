@@ -62,10 +62,10 @@ public class StockTracker {
         System.out.println("Account Balance: " + account.getBalance());
         Stock ownedStock = account.getOwnedStock();
         if (ownedStock == null) {
-            System.out.println("You do not own any stock.");
+            System.out.println("You do not own any stock. Sorry");
         } else {
             System.out.println("You own " + ownedStock.getShares()
-                    + " shares of " + ownedStock.getStock());
+                    + " shares of " + ownedStock.getStockSymbol());
         }
         System.out.println();
     }
