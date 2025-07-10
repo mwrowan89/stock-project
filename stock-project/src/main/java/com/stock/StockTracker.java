@@ -121,8 +121,10 @@ public class StockTracker {
             System.out.println("You do not own any stock. Sorry");
         } else {
             System.out.println("You own the following stocks:");
+            int i = 1;
             for (Stock stock : ownedStock.values()) {
-                System.out.println("- " + stock.toString());
+                System.out.println(i + ". " + stock.toString());
+                i++;
             }
         }
         System.out.println();
