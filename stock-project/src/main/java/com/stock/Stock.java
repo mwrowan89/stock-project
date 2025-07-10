@@ -32,5 +32,12 @@ public class Stock {
 
 
     // Methods
+    @Override
+    public String toString() {
+        return " " +
+                "stockSymbol: '" + stockSymbol + '\'' +
+                ", shares = " + shares +
+                ", stockPrice = " + stockPrice;
+    }
 
 }

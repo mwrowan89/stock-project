@@ -100,8 +100,7 @@ public class StockTracker {
         if (ownedStock == null) {
             System.out.println("You do not own any stock. Sorry");
         } else {
-            System.out.println("You own " + ownedStock.getShares()
-                    + " shares of " + ownedStock.getStockSymbol() );
+            System.out.println("You own " + ownedStock.toString());
         }
         System.out.println();
     }

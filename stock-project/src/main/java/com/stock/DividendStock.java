@@ -18,5 +18,8 @@ public class DividendStock extends Stock {
     }
 
     // Methods
-
+    public String toString() {
+        return super.toString() + " DividendStock: " +
+                "dividendPaid: " + dividendPaid;
+    }
 }
