@@ -3,6 +3,7 @@ import com.exceptions.InputError;
 import com.exceptions.StockException;
 
 import java.util.Scanner;
+import java.util.SortedMap;
 
 public class StockTracker {
     static Scanner input = new Scanner(System.in);
@@ -114,11 +115,15 @@ public class StockTracker {
         System.out.println("Account details:");
         System.out.println("Name: " + account.getName());
         System.out.println("Account Balance: " + String.format("%.2f",account.getBalance()));
-        Stock ownedStock = account.getOwnedStock();
-        if (ownedStock == null) {
+
+        SortedMap<String, Stock> ownedStock = account.getHeldStocks();
+        if (ownedStock.isEmpty()) {
             System.out.println("You do not own any stock. Sorry");
         } else {
-            System.out.println("You own " + ownedStock.toString());
+            System.out.println("You own the following stocks:");
+            for (Stock stock : ownedStock.values()) {
+                System.out.println("- " + stock.toString());
+            }
         }
         System.out.println();
     }
