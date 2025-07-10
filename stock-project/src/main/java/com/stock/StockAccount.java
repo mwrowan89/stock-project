@@ -1,5 +1,7 @@
 package com.stock;
 
+import com.exceptions.StockException;
+
 public class StockAccount {
     private final String name;
     private double balance;
@@ -31,10 +33,24 @@ public class StockAccount {
 
 
     // Methods
-    public void buyStock(Stock stock) {
+    public void buyStock(Stock stock) throws StockException {
         double total = stock.getShares() * stock.getStockPrice();
+        try {
+            if (stock.getShares() <= 0) {
+                throw new StockException("You cannot buy 0 or less shares of stock");
+            }
+            if (stock.getStockPrice() <= 0) {
+                throw new StockException("You cannot buy a stock that is less than or equal to 0");
+            }
+            if (stock.getStockSymbol() == null || stock.getStockSymbol().isBlank()) {
+                throw new StockException("You must enter a valid stock symbol");
+            }
+        } catch (StockException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
         if(total > balance) {
-            System.out.println("Sorry not enough money to purchase this stock");
+            throw (new StockException("You do not have enough money to purchase this stock"));
         } else {
             setBalance(balance -= stock.getStockPrice() * stock.getShares());
             System.out.println("Thank you for your purchase of " + stock.getStockSymbol());
@@ -50,17 +66,14 @@ public class StockAccount {
         }
     }
 
-    public void sellStock(Stock proposedStock) {
-        if (ownedStock == null) {
-            System.out.println("You don't own any stock to sell.");
-            return;
-        }
+    public void sellStock(Stock proposedStock) throws StockException {
+        if (ownedStock == null) throw new StockException("You must enter a stock to sell this stock");
 
         if (proposedStock.getStockSymbol().equalsIgnoreCase(ownedStock.getStockSymbol())) {
             int shareAmount = ownedStock.getShares();
             int sellAmount = proposedStock.getShares();
             if (shareAmount < sellAmount) {
-                System.out.println("Not enough stock to sell");
+                throw new StockException("You cannot sell more stock than you own");
             } else {
                 balance += sellAmount * proposedStock.getStockPrice();
                 int newShareAmount = ownedStock.getShares() - sellAmount;
@@ -73,8 +86,7 @@ public class StockAccount {
                 }
             }
         } else {
-            System.out.println("Sorry you do not own any of that stock.");
-        }
+            throw new StockException("You cannot sell more stock than you own");        }
     }
     public Stock getOwnedStock() {
         return ownedStock;

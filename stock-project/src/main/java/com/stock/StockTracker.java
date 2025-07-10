@@ -1,10 +1,13 @@
 package com.stock;
+import com.exceptions.InputError;
+import com.exceptions.StockException;
+
 import java.util.Scanner;
 
 public class StockTracker {
     static Scanner input = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InputError {
         printIntro();
         StockAccount account = collectAccountInfo();
 
@@ -25,16 +28,30 @@ public class StockTracker {
             System.out.println("2. Sell Stock");
             System.out.println("3. Exit");
             System.out.print("Please enter 1, 2, or 3: ");
-            choice = input.nextInt();
 
-            while (choice < 1 || choice > 3) {
-                System.out.print("Invalid choice. Please enter 1, 2, or 3: ");
-                choice = input.nextInt();
+            boolean validInput = false;
+            while (!validInput) {
+                try {
+                    choice = input.nextInt();
+
+                    if (choice < 1 || choice > 3) {
+                        System.out.print("Invalid choice. Please enter 1, 2, or 3: ");
+                    } else {
+                        validInput = true;
+                    }
+                } catch (java.util.InputMismatchException e) {
+                    input.next(); // Clear the invalid input
+                    System.out.print("Invalid input. Please enter a number (1, 2, or 3): ");
+                }
             }
 
             if (choice == 1) {
                 Stock purchaseStock = collectStockInfo();
-                account.buyStock(purchaseStock);
+                try {
+                    account.buyStock(purchaseStock);
+                } catch (StockException e) {
+                    System.out.println("Error occurred while buying stock: " + e.getMessage());
+                }
                 printAccountSummary(account);
             } else if (choice == 2) {
                 if(account.getOwnedStock() == null) {
@@ -43,7 +60,11 @@ public class StockTracker {
                     continue;
                 }
                 Stock sellStock = collectStockInfo();
-                account.sellStock(sellStock);
+                try {
+                    account.sellStock(sellStock);
+                } catch (StockException e) {
+                    System.out.println("Error occurred while selling stock: " + e.getMessage());
+                }
                 printAccountSummary(account);
             }
         }
@@ -71,7 +92,6 @@ public class StockTracker {
             return new Stock(stockName, stockAmount, stockPrice);
         }
     }
-
 
     private static StockAccount collectAccountInfo() {
         System.out.print("Please enter your full name: ");
@@ -102,7 +122,6 @@ public class StockTracker {
         }
         System.out.println();
     }
-
 
     private static void printIntro() {
         System.out.println("*******************************");
