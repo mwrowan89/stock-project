@@ -2,10 +2,13 @@ package com.stock;
 
 import com.exceptions.StockException;
 
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 public class StockAccount {
     private final String name;
     private double balance;
-    private Stock ownedStock;
+    private final SortedMap<String, Stock> ownedStock;
 
     // Constructors
 
@@ -13,6 +16,7 @@ public class StockAccount {
         super();
         this.name = name;
         this.balance = balance;
+        this.ownedStock = new TreeMap<>();
     }
     public StockAccount(String name) {
         this(name, 1000);
@@ -56,39 +60,51 @@ public class StockAccount {
             System.out.println("Thank you for your purchase of " + stock.getStockSymbol());
             System.out.println("Your new balance is " + String.format("%.2f",getBalance()));
 
-            if (ownedStock != null && ownedStock.getStockSymbol().equalsIgnoreCase(stock.getStockSymbol())) {
-                int totalShares = ownedStock.getShares() + stock.getShares();
-                stock.setShares(totalShares);
-                ownedStock = stock;
+            String symbol = stock.getStockSymbol();
+            if (ownedStock.containsKey(symbol)) {
+                Stock existingStock = ownedStock.get(symbol);
+                int totalShares = existingStock.getShares() + stock.getShares();
+                existingStock.setShares(totalShares);
+                ownedStock.put(symbol, existingStock);
             } else {
-                ownedStock = stock;
+                ownedStock.put(symbol, stock);
             }
         }
     }
 
     public void sellStock(Stock proposedStock) throws StockException {
-        if (ownedStock == null) throw new StockException("You must enter a stock to sell this stock");
+        String symbol = proposedStock.getStockSymbol();
+        if (ownedStock.isEmpty()) throw new StockException("You do not own any stock to sell");
 
-        if (proposedStock.getStockSymbol().equalsIgnoreCase(ownedStock.getStockSymbol())) {
-            int shareAmount = ownedStock.getShares();
-            int sellAmount = proposedStock.getShares();
-            if (shareAmount < sellAmount) {
-                throw new StockException("You cannot sell more stock than you own");
-            } else {
-                balance += sellAmount * proposedStock.getStockPrice();
-                int newShareAmount = ownedStock.getShares() - sellAmount;
+        if (!ownedStock.containsKey(symbol)) {
+            throw new StockException("You don't own this stock: " + symbol);
+        }
 
-                if (newShareAmount > 0) {
-                    proposedStock.setShares(newShareAmount);
-                    ownedStock = proposedStock;
-                } else {
-                    ownedStock = null;
-                }
-            }
+        Stock heldStock = ownedStock.get(symbol);
+        int sharesOwned = heldStock.getShares();
+        int sharesToSell = proposedStock.getShares();
+        if (sharesOwned < sharesToSell) {
+            throw new StockException("You cannot sell more stock than you own");
         } else {
-            throw new StockException("You cannot sell more stock than you own");        }
+            balance += sharesToSell * proposedStock.getStockPrice();
+            int newShareAmount = heldStock.getShares() - sharesToSell;
+
+            if (newShareAmount > 0) {
+                proposedStock.setShares(newShareAmount);
+                heldStock.setShares(newShareAmount);
+            } else {
+                ownedStock.remove(symbol);
+            }
+        }
     }
-    public Stock getOwnedStock() {
+    public SortedMap<String, Stock> getHeldStocks() {
         return ownedStock;
+    }
+
+    public Stock getOwnedStock() {
+        if (ownedStock.isEmpty()) {
+            return null;
+        }
+        return ownedStock.values().iterator().next();
     }
 }
