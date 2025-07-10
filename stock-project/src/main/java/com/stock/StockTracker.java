@@ -90,7 +90,7 @@ public class StockTracker {
             stock.setDividendPaid(dividendAmount);
             return stock;
         } else {
-            return new Stock(stockName, stockAmount, stockPrice);
+            return new Stock(stockName.toUpperCase(), stockAmount, stockPrice);
         }
     }
 
