@@ -34,10 +34,10 @@ public class Stock {
     // Methods
     @Override
     public String toString() {
-        return " " +
+        return
                 "stockSymbol: '" + stockSymbol + '\'' +
                 ", shares = " + shares +
-                ", stockPrice = " + stockPrice;
+                ", stockPrice = " + String.format("%.2f",stockPrice);
     }
 
 }

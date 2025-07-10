@@ -38,7 +38,7 @@ public class StockAccount {
         } else {
             setBalance(balance -= stock.getStockPrice() * stock.getShares());
             System.out.println("Thank you for your purchase of " + stock.getStockSymbol());
-            System.out.println("Your new balance is " + getBalance());
+            System.out.println("Your new balance is " + String.format("%.2f",getBalance()));
 
             if (ownedStock != null && ownedStock.getStockSymbol().equalsIgnoreCase(stock.getStockSymbol())) {
                 int totalShares = ownedStock.getShares() + stock.getShares();
